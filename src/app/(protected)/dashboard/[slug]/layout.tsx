@@ -8,11 +8,11 @@ import { prefetchUserAutomations, prefetchUserProfile } from '@/lib/react-query/
 
 type Props = {
     children: React.ReactNode
-    params: { slug: string }
+    params: Promise<{ slug: string }>
 
 }
 
-const Layout = async ({ children, params }: Props) => {
+export default async function Layout({ children, params }: Props) {
     // Query
     // WIP: Query client fetch data
     const { slug } = await params
@@ -47,4 +47,3 @@ const Layout = async ({ children, params }: Props) => {
     )
 }
 
-export default Layout

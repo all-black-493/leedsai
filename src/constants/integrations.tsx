@@ -4,7 +4,7 @@ type Props ={
     title: string
     icon: React.ReactNode
     description: string
-    strategy: 'INSTAGRAM' | 'WHATSAPP' | 'TIKTOK' | 'CRM'
+    strategy: 'INSTAGRAM' | 'CRM'
 }
 
 export const INTEGRATION_CARDS: Props[] = [
@@ -14,22 +14,22 @@ export const INTEGRATION_CARDS: Props[] = [
         icon: <InstagramIcon />,
         strategy: 'INSTAGRAM',
     },
-    {
-        title: 'Connect Whatsapp',
-        description: 'Whatsapp Connection Description',
-        icon: <ComputerIcon />,
-        strategy: 'WHATSAPP',
-    },
-    {
-        title: 'Connect TikTok',
-        description: 'TikTok Connection Description',
-        icon: <RatIcon />,
-        strategy: 'TIKTOK',
-    },
+    // {
+    //     title: 'Connect Whatsapp',
+    //     description: 'Whatsapp Connection Description',
+    //     icon: <ComputerIcon />,
+    //     strategy: 'WHATSAPP',
+    // },
+    // {
+    //     title: 'Connect TikTok',
+    //     description: 'TikTok Connection Description',
+    //     icon: <RatIcon />,
+    //     strategy: 'TIKTOK',
+    // },
     {
         title: 'Connect Salesforce',
         description: 'Salesforce Connection Description',
         icon: <Satellite />,
-        strategy: 'WHATSAPP',
+        strategy: 'CRM',
     },
 ]

@@ -23,7 +23,7 @@ const ThenAction = ({ id }: Props) => {
                 {AUTOMATION_LISTENERS.map((listener) => listener.type === 'MESSAGE' ? (
                     <SubscriptionPlan
                         key={listener.type}
-                        type="PRO"
+                        type="STARTER"
                     >
                         <div
                             onClick={() => onSetListener(listener.type)}

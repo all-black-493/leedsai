@@ -14,7 +14,9 @@ type Props = {
 
 const IntegrationCard = ({ description, title, icon, strategy }: Props) => {
 
-    const onInstaOAuth = () => onOAuthInstagram(strategy)
+    const onInstaOAuth = async () => {
+        await onOAuthInstagram(strategy)
+    }
 
     const { data } = useQuery({
         queryKey: ['user-profile'],

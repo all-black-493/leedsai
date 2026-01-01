@@ -1,4 +1,4 @@
-import { createAutomations, fetchAllUserAutomations, getAutomationInfo } from "@/actions/automations"
+import { fetchAllUserAutomations, getAutomationInfo } from "@/actions/automations"
 import { onUserInfo } from "@/actions/user"
 import { QueryClient, QueryFunction } from "@tanstack/react-query"
 

@@ -130,7 +130,7 @@ export const addTriggerQuery = async (automationId: string, trigger: string[]) =
     })
 }
 
-export const addKeywordQuery = async (automationId: string, keyword:string) =>{
+export const addKeywordQuery = async (automationId: string, keyword: string) => {
     return prisma.automation.update({
         where: {
             id: automationId,
@@ -145,9 +145,9 @@ export const addKeywordQuery = async (automationId: string, keyword:string) =>{
     })
 }
 
-export const deleteKeywordQuery = async(id: string)=>{
+export const deleteKeywordQuery = async (id: string) => {
     return prisma.keyword.delete({
-        where: {id}
+        where: { id }
     })
 }
 
@@ -159,31 +159,35 @@ export const addPostQuery = async (
         media: string
         mediaType: 'IMAGE' | 'VIDEO' | 'CAROSEL_ALBUM'
     }[]
-) =>{
-    return await prisma.automation.update({
-        where: {
-            id: automationId,
-        },
-        data: {
-            posts: {
-                createMany :{
-                    data: posts
+) => {
+    try {
+        return await prisma.automation.update({
+            where: {
+                id: automationId,
+            },
+            data: {
+                posts: {
+                    createMany: {
+                        data: posts
+                    }
                 }
             }
-        }
-    })
+        })
+    } catch (error) {
+        console.log('AN ERROR OCCURRED :', error)
+    }
 }
 
 export const updateAutomationStateQuery = async (
-    id:string,
+    id: string,
     update: {
         name?: string
-        active? : boolean
+        active?: boolean
     }
 ) => {
     return await prisma.automation.update({
-        where: {id},
-        data:{
+        where: { id },
+        data: {
             name: update.name,
             active: update.active,
         }

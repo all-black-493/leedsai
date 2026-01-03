@@ -24,13 +24,23 @@ export async function POST(req: NextRequest) {
         }
 
         if (webhook_payload.entry[0].changes) {
-            matcher = await matchKeyword(
-                webhook_payload.entry[0].changes[0].value.text
-            )
+            const changeEvent = webhook_payload.entry[0].changes[0];
+
+            // Check if value and text exist
+            if (changeEvent.value && changeEvent.value.text) {
+                matcher = await matchKeyword(changeEvent.value.text)
+            }
         }
 
         if (matcher && matcher.automationId) {
             if (webhook_payload.entry[0].messaging) {
+
+                const messagingEvent = webhook_payload.entry[0].messaging[0];
+
+                // Double check message existence before processing
+                if (!messagingEvent.message || !messagingEvent.message.text) {
+                    return NextResponse.json({ message: 'Ignored non-text event' }, { status: 200 });
+                }
 
                 const automation = await getKeywordAutomation(
                     matcher.automationId,
@@ -221,88 +231,73 @@ export async function POST(req: NextRequest) {
         }
 
         if (!matcher) {
-            const customer_history = await getChatHistory(
-                webhook_payload.entry[0].messaging[0].recipient.id,
-                webhook_payload.entry[0].messaging[0].sender.id,
-            )
 
-            if (customer_history.history.length > 0) {
-                const automation = await findAutomation(
-                    customer_history.automationId!
+            const messagingEvent = webhook_payload.entry[0].messaging?.[0];
+
+            if (messagingEvent && messagingEvent.message && messagingEvent.message.text) {
+
+                const customer_history = await getChatHistory(
+                    messagingEvent.recipient.id,
+                    messagingEvent.sender.id,
                 )
 
-                if (automation?.User?.subscription?.plan === 'STARTER' &&
-                    automation.listener?.listener === 'SMARTAI'
-                ) {
-                    const smart_ai_message = await openai.chat.completions.create({
-                        model: "gemini-2.5-flash",
-                        messages: [
-                            {
-                                role: 'assistant',
-                                content: `${automation.listener?.prompt}: Kepp responses under 2 sentences`
-                            },
-                            ...customer_history.history,
-                            {
-                                role: 'user',
-                                content: webhook_payload.entry[0].messaging[0].message.text,
-                            }
-                        ]
-                    })
+                if (customer_history.history.length > 0) {
+                    const automation = await findAutomation(customer_history.automationId!)
 
-                    if (smart_ai_message.choices[0].message.content) {
-                        const receiver = createChatHistory(
-                            automation.id,
-                            webhook_payload.entry[0].id,
-                            webhook_payload.entry[0].messaging[0].sender.id,
-                            webhook_payload.entry[0].messaging[0].message.text,
-                        )
-
-                        const sender = createChatHistory(
-                            automation.id,
-                            webhook_payload.entry[0].id,
-                            webhook_payload.entry[0].messaging[0].sender.id,
-                            smart_ai_message.choices[0].message.content,
-                        )
-
-                        await prisma.$transaction([receiver, sender])
-
-                        const direct_message = await sendDM(
-                            webhook_payload.entry[0].id,
-                            webhook_payload.entry[0].messaging[0].sender.id,
-                            smart_ai_message.choices[0].message.content,
-                            automation.User?.integrations[0].token!
-                        )
-
-                        if (direct_message.status === 200) {
-                            return NextResponse.json(
+                    if (automation?.User?.subscription?.plan === 'STARTER' &&
+                        automation.listener?.listener === 'SMARTAI'
+                    ) {
+                        const smart_ai_message = await openai.chat.completions.create({
+                            model: "gemini-2.5-flash",
+                            messages: [
                                 {
-                                    message: 'Message Sent'
+                                    role: 'assistant',
+                                    content: `${automation.listener?.prompt}: Keep responses under 2 sentences` // Fixed typo: Kepp -> Keep
                                 },
-                                { status: 200 }
+                                ...customer_history.history,
+                                {
+                                    role: 'user',
+                                    content: messagingEvent.message.text,
+                                }
+                            ]
+                        })
+
+                        if (smart_ai_message.choices[0].message.content) {
+                            const receiver = createChatHistory(
+                                automation.id,
+                                webhook_payload.entry[0].id,
+                                messagingEvent.sender.id,
+                                messagingEvent.message.text,
                             )
+
+                            const sender = createChatHistory(
+                                automation.id,
+                                webhook_payload.entry[0].id,
+                                messagingEvent.sender.id,
+                                smart_ai_message.choices[0].message.content,
+                            )
+
+                            await prisma.$transaction([receiver, sender])
+
+                            const direct_message = await sendDM(
+                                webhook_payload.entry[0].id,
+                                messagingEvent.sender.id,
+                                smart_ai_message.choices[0].message.content,
+                                automation.User?.integrations[0].token!
+                            )
+
+                            if (direct_message.status === 200) {
+                                return NextResponse.json({ message: 'Message Sent' }, { status: 200 })
+                            }
                         }
                     }
                 }
             }
 
-            return NextResponse.json(
-                {
-                    message: 'No automation set',
-                },
-                {
-                    status: 404
-                }
-            )
+            return NextResponse.json({ message: 'No automation set' }, { status: 200 })
         }
 
-        return NextResponse.json(
-            {
-                message: 'No automation set'
-            },
-            {
-                status: 404
-            }
-        )
+        return NextResponse.json({ message: 'No automation set' }, { status: 200 })
 
     } catch (error) {
 

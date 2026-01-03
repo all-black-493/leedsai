@@ -67,20 +67,27 @@ const AutomationList = (props: Props) => {
 
                         {automation.keywords?.length > 0 ? (
                             <div className="flex gap-x-2 flex-wrap mt-3">
-                                <div className={cn(
-                                    'rounded-full px-4 py-1 capitalize font-semibold text-sm',
-                                    (0 + 1) % 1 == 0 &&
-                                    'bg-emerald-500/15 border-2 border-emerald-500',
-                                    (1 + 1) % 2 == 0 &&
-                                    'bg-purple-700/15 border-2 border-purple-400',
-                                    (2 + 1) % 3 == 0 &&
-                                    'bg-yellow-700/15 border-2 border-yellow-400',
-                                    (3 + 1) % 4 == 0 &&
-                                    'bg-red-500/15 border-2 border-red-500'
-                                )}
-                                >
-                                    get started
-                                </div>
+                                {
+                                    //@ts-ignore
+                                    automation.keywords.map((keyword, key) => (
+                                        <div
+                                            key={keyword.id}
+                                            className={cn(
+                                                'rounded-full px-4 py-1 capitalize font-semibold text-sm',
+                                                (0 + 1) % 1 == 0 &&
+                                                'bg-emerald-500/15 border-2 border-emerald-500',
+                                                (1 + 1) % 2 == 0 &&
+                                                'bg-purple-700/15 border-2 border-purple-400',
+                                                (2 + 1) % 3 == 0 &&
+                                                'bg-yellow-700/15 border-2 border-yellow-400',
+                                                (3 + 1) % 4 == 0 &&
+                                                'bg-red-500/15 border-2 border-red-500'
+                                            )}
+                                        >
+                                            {keyword.word}
+                                        </div>
+                                    ))}
+
                             </div>
                         ) : (
 

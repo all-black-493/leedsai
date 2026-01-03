@@ -203,10 +203,10 @@ export async function POST(req: NextRequest) {
 
                                 await prisma.$transaction([receiver, sender])
 
-                                const direct_message = await sendDM(
+                                const direct_message = await sendPrivateMessage(
                                     webhook_payload.entry[0].id,
-                                    webhook_payload.entry[0].changes[0].value.from.id,
-                                    smart_ai_message.choices[0].message.content,
+                                    webhook_payload.entry[0].changes[0].value.id,
+                                    automation.listener?.prompt,
                                     automation.User?.integrations[0].token!
                                 )
 

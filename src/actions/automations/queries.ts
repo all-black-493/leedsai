@@ -157,7 +157,7 @@ export const addPostQuery = async (
         postid: string,
         caption?: string,
         media: string
-        mediaType: 'IMAGE' | 'VIDEO' | 'CAROSEL_ALBUM'
+        mediaType: 'IMAGE' | 'VIDEO' | 'CAROUSEL_ALBUM'
     }[]
 ) => {
     try {

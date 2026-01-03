@@ -308,7 +308,7 @@ export async function POST(req: NextRequest) {
                 message: 'No automation set'
             },
             {
-                status: 500
+                status: 200
             }
         )
     }

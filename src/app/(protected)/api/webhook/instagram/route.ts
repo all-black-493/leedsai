@@ -301,6 +301,7 @@ export async function POST(req: NextRequest) {
         )
 
     } catch (error) {
+        console.log("[WEBHOOK ERROR: ]", error)
         return NextResponse.json(
             {
                 message: 'No automation set'

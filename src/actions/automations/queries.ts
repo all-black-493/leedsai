@@ -174,7 +174,7 @@ export const addPostQuery = async (
             }
         })
     } catch (error) {
-        console.log('AN ERROR OCCURRED :', error)
+        console.log('[AN ERROR OCCURRED :]', error)
     }
 }
 

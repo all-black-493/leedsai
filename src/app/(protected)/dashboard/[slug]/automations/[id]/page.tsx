@@ -16,6 +16,8 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 
     const { id } = await params
 
+    console.log("[GENERATE METADATA ID]: ", id)
+
     const info = await getAutomationInfo(id)
     return {
         title: info.data?.name

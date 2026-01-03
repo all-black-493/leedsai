@@ -154,6 +154,7 @@ export const savePosts = async (
 ) => {
     await onCurrentUser()
     try {
+        console.log("[SAVE POSTS DB QUERY AUTOMATION ID:]", automationId)
         const create = await addPostQuery(automationId, posts)
         if (create) return { status: 200, data: 'Posts attached' }
         return { status: 404, data: 'Automation not found' }

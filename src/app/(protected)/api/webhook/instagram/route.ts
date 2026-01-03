@@ -16,7 +16,11 @@ export async function POST(req: NextRequest) {
     let matcher
     try {
         if (webhook_payload.entry[0].messaging) {
-            matcher = await matchKeyword(webhook_payload.entry[0].messaging[0].message.text)
+            const event = webhook_payload.entry[0].messaging[0];
+            // Only run if it's actually a message with text
+            if (event.message && event.message.text) {
+                matcher = await matchKeyword(event.message.text)
+            }
         }
 
         if (webhook_payload.entry[0].changes) {
@@ -301,7 +305,9 @@ export async function POST(req: NextRequest) {
         )
 
     } catch (error) {
+
         console.log("[WEBHOOK ERROR: ]", error)
+
         return NextResponse.json(
             {
                 message: 'No automation set'

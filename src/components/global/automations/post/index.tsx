@@ -55,7 +55,7 @@ const PostButton = ({ id }: Props) => {
                                             'hover:opacity-75 transition duration-100',
                                             posts.find((p) => p.postid === post.id) && 'opacity-75'
                                         )}
-                                        unoptimized
+                                        // unoptimized
                                     />
                                 </div>
                             )

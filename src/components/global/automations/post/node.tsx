@@ -42,7 +42,7 @@ const PostNode = ({ id }: Props) => {
                                 sizes='100vw'
                                 src={post.media}
                                 alt='post image'
-                                unoptimized
+                                // unoptimized
                             />
                         </div>
                     ))}

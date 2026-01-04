@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
                             messages: [
                                 {
                                     role: 'system',
-                                    content: `${automation.listener?.prompt}: Keep responses under 2 sentences and strictly not more than 900 characters`
+                                    content: `${automation.listener?.prompt}: Keep responses under 2 sentences and strictly not more than 700 characters. VERIFY THAT THIS NUMBER OF CHARACTERS IS NOT EXCEEDED IN YOUR RESPONSE.`
                                 },
                                 {
                                     role: "user",
@@ -250,7 +250,7 @@ export async function POST(req: NextRequest) {
                                 messages: [
                                     {
                                         role: 'system',
-                                        content: `${automation.listener?.prompt}: Keep responses under 2 sentences and strictly not more than 900 characters`
+                                        content: `${automation.listener?.prompt}: Keep responses under 2 sentences and strictly not more than 700 characters. VERIFY THAT THIS NUMBER OF CHARACTERS IS NOT EXCEEDED IN YOUR RESPONSE.`
                                     },
                                     {
                                         role: "user",
@@ -346,7 +346,7 @@ export async function POST(req: NextRequest) {
                             messages: [
                                 {
                                     role: 'system',
-                                    content: `${automation.listener?.prompt}: Keep responses under 2 sentences and strictly not more than 900 characters.` // Fixed typo: Kepp -> Keep
+                                    content: `${automation.listener?.prompt}: Keep responses under 2 sentences and strictly not more than 700 characters. VERIFY THAT THIS NUMBER OF CHARACTERS IS NOT EXCEEDED IN YOUR RESPONSE.` // Fixed typo: Kepp -> Keep
                                 },
                                 ...customer_history.history,
                                 {

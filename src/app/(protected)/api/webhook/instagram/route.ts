@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
                             model: "gemini-2.5-flash",
                             messages: [
                                 {
-                                    role: 'assistant',
+                                    role: 'system',
                                     content: `${automation.listener?.prompt}: Keep responses under 2 sentences`
                                 }
                             ]
@@ -244,7 +244,7 @@ export async function POST(req: NextRequest) {
                                 model: 'gemini-2.5-flash',
                                 messages: [
                                     {
-                                        role: 'assistant',
+                                        role: 'system',
                                         content: `${automation.listener?.prompt}: Keep responses under 2 sentences`
                                     }
                                 ]
@@ -336,7 +336,7 @@ export async function POST(req: NextRequest) {
                             model: "gemini-2.5-flash",
                             messages: [
                                 {
-                                    role: 'assistant',
+                                    role: 'system',
                                     content: `${automation.listener?.prompt}: Keep responses under 2 sentences` // Fixed typo: Kepp -> Keep
                                 },
                                 ...customer_history.history,

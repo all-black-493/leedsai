@@ -7,8 +7,8 @@ export const matchKeyword = async (keyword: string) => {
         return await prisma.keyword.findFirst({
             where: {
                 word: {
-                    equals: keyword,
-                    mode: 'insensitive'
+                    equals: keyword.toLowerCase(),
+                    // mode: 'insensitive'
                 }
             }
         })

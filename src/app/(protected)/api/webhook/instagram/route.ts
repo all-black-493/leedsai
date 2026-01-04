@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
             if (event.message && event.message.text) {
                 console.log("[WEBHOOK] Message text found:", event.message.text.substring(0, 100));
                 matcher = await matchKeyword(event.message.text)
+                console.log("[MATCHER RAW RESULT]", matcher);
                 console.log("[WEBHOOK] Keyword match result:", matcher ? `Found automationId: ${matcher.automationId}` : "No match");
             } else {
                 console.log("[WEBHOOK] No text message found in messaging event");

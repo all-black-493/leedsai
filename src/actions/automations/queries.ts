@@ -138,7 +138,7 @@ export const addKeywordQuery = async (automationId: string, keyword: string) => 
         data: {
             keywords: {
                 create: {
-                    word: keyword
+                    word: keyword.toLowerCase()
                 }
             }
         }

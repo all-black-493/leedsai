@@ -16,8 +16,8 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
     console.log("[WEBHOOK] POST endpoint called");
     const webhook_payload = await req.json()
-    console.log("[WEBHOOK] Received payload type:", webhook_payload.entry?.[0]?.messaging ? 'messaging' : webhook_payload.entry?.[0]?.changes ? 'changes' : 'unknown');
-    
+    console.log("[WEBHOOK] Received payload type:", webhook_payload.entry?.[0]?.messaging ? 'messaging' : webhook_payload.entry?.[0]?.changes ? 'comments' : 'unknown');
+
     let matcher
 
     try {
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
 
         if (matcher && matcher.automationId) {
             console.log("[WEBHOOK] Matcher found with automationId:", matcher.automationId);
-            
+
             if (webhook_payload.entry[0].messaging) {
                 console.log("[WEBHOOK] Processing messaging automation flow");
 
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
 
                 if (automation && automation.trigger) {
                     console.log("[WEBHOOK] Automation trigger is active");
-                    
+
                     if (automation.listener &&
                         automation.listener.listener === "MESSAGE") {
                         console.log("[WEBHOOK] Processing MESSAGE listener type");
@@ -84,13 +84,13 @@ export async function POST(req: NextRequest) {
                             automation.User?.integrations[0].token!
                         )
                         console.log("[WEBHOOK] DM send status:", direct_message.status);
-                        
+
                         if (direct_message.status === 200) {
                             const tracked = await trackResponse(
                                 automation.id, 'DM'
                             )
                             console.log("[WEBHOOK] Response tracking result:", tracked ? "Success" : "Failed");
-                            
+
                             if (tracked) {
                                 console.log("[WEBHOOK] MESSAGE automation completed successfully");
                                 return NextResponse.json(
@@ -114,6 +114,10 @@ export async function POST(req: NextRequest) {
                                 {
                                     role: 'system',
                                     content: `${automation.listener?.prompt}: Keep responses under 2 sentences`
+                                },
+                                {
+                                    role: "user",
+                                    content: messagingEvent.message.text
                                 }
                             ]
                         })
@@ -122,7 +126,7 @@ export async function POST(req: NextRequest) {
 
                         if (smart_ai_message.choices[0].message.content!) {
                             console.log("[WEBHOOK] OpenAI response received");
-                            
+
                             const receiver = createChatHistory(
                                 automation.id,
                                 webhook_payload.entry[0].id,
@@ -151,7 +155,7 @@ export async function POST(req: NextRequest) {
                             if (direct_message.status === 200) {
                                 const tracked = await trackResponse(automation.id, 'DM')
                                 console.log("[WEBHOOK] AI response tracking result:", tracked ? "Success" : "Failed");
-                                
+
                                 if (tracked) {
                                     console.log("[WEBHOOK] SMARTAI automation completed successfully");
                                     return NextResponse.json(
@@ -181,7 +185,7 @@ export async function POST(req: NextRequest) {
                 webhook_payload.entry[0].changes[0].field === 'comments'
             ) {
                 console.log("[WEBHOOK] Processing comments automation flow");
-                
+
                 const automation = await getKeywordAutomation(
                     matcher.automationId,
                     false
@@ -200,7 +204,7 @@ export async function POST(req: NextRequest) {
                     automation.trigger
                 ) {
                     console.log("[WEBHOOK] Comments automation conditions met");
-                    
+
                     if (automation.listener) {
                         if (automation.listener.listener === 'MESSAGE') {
                             console.log("[WEBHOOK] Processing MESSAGE listener for comment");
@@ -211,14 +215,14 @@ export async function POST(req: NextRequest) {
                                 automation.User?.integrations[0].token!
                             )
                             console.log("[WEBHOOK] Private message send status:", direct_message.status);
-                            
+
                             if (direct_message.status === 200) {
                                 const tracked = await trackResponse(
                                     automation.id,
                                     'COMMENT'
                                 )
                                 console.log("[WEBHOOK] Comment response tracking result:", tracked ? "Success" : "Failed");
-                                
+
                                 if (tracked) {
                                     console.log("[WEBHOOK] Comment MESSAGE automation completed successfully");
                                     return NextResponse.json(
@@ -246,6 +250,10 @@ export async function POST(req: NextRequest) {
                                     {
                                         role: 'system',
                                         content: `${automation.listener?.prompt}: Keep responses under 2 sentences`
+                                    },
+                                    {
+                                        role: "user",
+                                        content: webhook_payload.entry[0].changes[0].value.text
                                     }
                                 ]
                             })
@@ -282,7 +290,7 @@ export async function POST(req: NextRequest) {
                                 if (direct_message.status === 200) {
                                     const tracked = await trackResponse(automation.id, 'COMMENT')
                                     console.log("[WEBHOOK] Comment AI response tracking result:", tracked ? "Success" : "Failed");
-                                    
+
                                     if (tracked) {
                                         console.log("[WEBHOOK] Comment SMARTAI automation completed successfully");
                                         return NextResponse.json(
@@ -310,7 +318,7 @@ export async function POST(req: NextRequest) {
 
         if (!matcher) {
             console.log("[WEBHOOK] No keyword match found, checking for existing chat history");
-            
+
             const messagingEvent = webhook_payload.entry[0].messaging?.[0];
 
             if (messagingEvent && messagingEvent.message && messagingEvent.message.text) {

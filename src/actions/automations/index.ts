@@ -103,6 +103,7 @@ export const saveKeyword = async (automationId: string, keyword: string) => {
     try {
 
         const create = await addKeywordQuery(automationId, keyword)
+        console.log("[KEYWORD CREATE RESULT]:", create);
         if (create) return { status: 200, data: 'Keyword added successfully' }
         return { status: 404, data: 'Cannot add this keyword' }
 

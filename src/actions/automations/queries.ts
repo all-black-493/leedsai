@@ -131,18 +131,26 @@ export const addTriggerQuery = async (automationId: string, trigger: string[]) =
 }
 
 export const addKeywordQuery = async (automationId: string, keyword: string) => {
-    return prisma.automation.update({
-        where: {
-            id: automationId,
-        },
-        data: {
-            keywords: {
-                create: {
-                    word: keyword.toLowerCase()
+    try {
+        return prisma.automation.update({
+            where: {
+                id: automationId,
+            },
+            data: {
+                keywords: {
+                    create:
+                    {
+                        word: keyword.toLowerCase()
+                    }
                 }
+            },
+            include: {
+                keywords: true
             }
-        }
-    })
+        })
+    } catch (error) {
+        console.log("[ERROR ADDING KEYWORD IN DB QUERY]: ", error)
+    }
 }
 
 export const deleteKeywordQuery = async (id: string) => {

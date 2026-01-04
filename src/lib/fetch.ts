@@ -14,27 +14,33 @@ export const sendDM = async (
     prompt: string,
     token: string
 ) => {
-    
+
     console.log('Sending Message ...')
 
-    return await axios.post(
-        `${process.env.INSTAGRAM_BASE_URL}/v21.0/${userId}/messages`,
-        {
-            recipient: {
-                id: receiverId
+    try {
+        return await axios.post(
+            `${process.env.INSTAGRAM_BASE_URL}/v21.0/${userId}/messages`,
+            {
+                messaging_product: "instagram",
+                recipient: {
+                    id: receiverId
+                },
+                message: {
+                    text: prompt
+                },
             },
-            message: {
-                text: prompt
-            },
-        },
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-        }
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            }
 
-    )
+        )
+    } catch (error) {
+        console.log("[ERROR SENDING DIRECT MESSAGE]:", error)
+    }
+
 
 }
 
@@ -44,25 +50,30 @@ export const sendPrivateMessage = async (
     prompt: string,
     token: string
 ) => {
-    console.log('Sending Message ...')
-    return await axios.post(
-        `${process.env.INSTAGRAM_BASE_URL}/${userId}/messages`,
-        {
-            recipient: {
-                comment_id: receiverId
-            },
-            message: {
-                text: prompt
-            },
-        },
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-        }
+    console.log('Sending Private Message ...')
 
-    )
+    try {
+        return await axios.post(
+            `${process.env.INSTAGRAM_BASE_URL}/${userId}/messages`,
+            {
+                recipient: {
+                    comment_id: receiverId
+                },
+                message: {
+                    text: prompt
+                },
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            }
+
+        )
+    } catch (error) {
+        console.log("[ERROR SENDING PRIVATE MESSAGE]:", error)
+    }
 
 }
 
@@ -82,7 +93,7 @@ export const generateTokens = async (code: string) => {
 
     const token = await shortTokenRes.json()
 
-    if(token.permissions.length > 0){
+    if (token.permissions.length > 0) {
         console.log(token, 'got permissions')
         const long_token = await axios.get(
             `${process.env.INSTAGRAM_BASE_URL}/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTAGRAM_CLIENT_SECRET}&access_token=${token.access_token}`

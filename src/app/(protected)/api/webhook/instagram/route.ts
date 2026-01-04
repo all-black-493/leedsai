@@ -84,9 +84,9 @@ export async function POST(req: NextRequest) {
                             automation.listener?.prompt,
                             automation.User?.integrations[0].token!
                         )
-                        console.log("[WEBHOOK] DM send status:", direct_message.status);
+                        console.log("[WEBHOOK] DM send status:", direct_message?.status);
 
-                        if (direct_message.status === 200) {
+                        if (direct_message?.status === 200) {
                             const tracked = await trackResponse(
                                 automation.id, 'DM'
                             )
@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
                                 )
                             }
                         } else {
-                            console.log("[WEBHOOK] DM send failed with status:", direct_message.status);
+                            console.log("[WEBHOOK] DM send failed with status:", direct_message?.status);
                         }
                     }
 
@@ -151,9 +151,9 @@ export async function POST(req: NextRequest) {
                                 smart_ai_message.choices[0].message.content,
                                 automation.User?.integrations[0].token!
                             )
-                            console.log("[WEBHOOK] AI DM send status:", direct_message.status);
+                            console.log("[WEBHOOK] AI DM send status:", direct_message?.status);
 
-                            if (direct_message.status === 200) {
+                            if (direct_message?.status === 200) {
                                 const tracked = await trackResponse(automation.id, 'DM')
                                 console.log("[WEBHOOK] AI response tracking result:", tracked ? "Success" : "Failed");
 
@@ -169,7 +169,7 @@ export async function POST(req: NextRequest) {
                                     )
                                 }
                             } else {
-                                console.log("[WEBHOOK] AI DM send failed with status:", direct_message.status);
+                                console.log("[WEBHOOK] AI DM send failed with status:", direct_message?.status);
                             }
 
                         } else {
@@ -215,9 +215,9 @@ export async function POST(req: NextRequest) {
                                 automation.listener?.prompt,
                                 automation.User?.integrations[0].token!
                             )
-                            console.log("[WEBHOOK] Private message send status:", direct_message.status);
+                            console.log("[WEBHOOK] Private message send status:", direct_message?.status);
 
-                            if (direct_message.status === 200) {
+                            if (direct_message?.status === 200) {
                                 const tracked = await trackResponse(
                                     automation.id,
                                     'COMMENT'
@@ -236,7 +236,7 @@ export async function POST(req: NextRequest) {
                                     )
                                 }
                             } else {
-                                console.log("[WEBHOOK] Private message send failed with status:", direct_message.status);
+                                console.log("[WEBHOOK] Private message send failed with status:", direct_message?.status);
                             }
                         }
 
@@ -286,9 +286,9 @@ export async function POST(req: NextRequest) {
                                     automation.listener?.prompt,
                                     automation.User?.integrations[0].token!
                                 )
-                                console.log("[WEBHOOK] Comment AI private message send status:", direct_message.status);
+                                console.log("[WEBHOOK] Comment AI private message send status:", direct_message?.status);
 
-                                if (direct_message.status === 200) {
+                                if (direct_message?.status === 200) {
                                     const tracked = await trackResponse(automation.id, 'COMMENT')
                                     console.log("[WEBHOOK] Comment AI response tracking result:", tracked ? "Success" : "Failed");
 
@@ -304,7 +304,7 @@ export async function POST(req: NextRequest) {
                                         )
                                     }
                                 } else {
-                                    console.log("[WEBHOOK] Comment AI private message send failed with status:", direct_message.status);
+                                    console.log("[WEBHOOK] Comment AI private message send failed with status:", direct_message?.status);
                                 }
                             } else {
                                 console.log("[WEBHOOK] OpenAI response for comment has no content");
@@ -383,13 +383,13 @@ export async function POST(req: NextRequest) {
                                 smart_ai_message.choices[0].message.content,
                                 automation.User?.integrations[0].token!
                             )
-                            console.log("[WEBHOOK] Continued conversation DM send status:", direct_message.status);
+                            console.log("[WEBHOOK] Continued conversation DM send status:", direct_message?.status);
 
-                            if (direct_message.status === 200) {
+                            if (direct_message?.status === 200) {
                                 console.log("[WEBHOOK] Continued conversation completed successfully");
                                 return NextResponse.json({ message: 'Message Sent' }, { status: 200 })
                             } else {
-                                console.log("[WEBHOOK] Continued conversation DM send failed with status:", direct_message.status);
+                                console.log("[WEBHOOK] Continued conversation DM send failed with status:", direct_message?.status);
                             }
                         } else {
                             console.log("[WEBHOOK] OpenAI response with history has no content");

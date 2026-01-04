@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
 export const refreshToken = async (token: string) => {
     const refresh_token = await axios.get(
@@ -39,6 +39,9 @@ export const sendDM = async (
         )
     } catch (error) {
         console.log("[ERROR SENDING DIRECT MESSAGE]:", error)
+        if (error instanceof AxiosError) {
+            console.log("[ERROR DM RESPONSE OBJECT]:", error.response)
+        }
     }
 
 
@@ -73,6 +76,9 @@ export const sendPrivateMessage = async (
         )
     } catch (error) {
         console.log("[ERROR SENDING PRIVATE MESSAGE]:", error)
+        if (error instanceof AxiosError) {
+            console.log("[ERROR DM RESPONSE OBJECT]:", error.response)
+        }
     }
 
 }

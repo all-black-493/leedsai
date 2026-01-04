@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
                             messages: [
                                 {
                                     role: 'system',
-                                    content: `${automation.listener?.prompt}: Keep responses under 2 sentences`
+                                    content: `${automation.listener?.prompt}: Keep responses under 2 sentences and strictly not more than 1900 characters`
                                 },
                                 {
                                     role: "user",
@@ -250,7 +250,7 @@ export async function POST(req: NextRequest) {
                                 messages: [
                                     {
                                         role: 'system',
-                                        content: `${automation.listener?.prompt}: Keep responses under 2 sentences`
+                                        content: `${automation.listener?.prompt}: Keep responses under 2 sentences and strictly not more than 1900 characters`
                                     },
                                     {
                                         role: "user",
@@ -346,7 +346,7 @@ export async function POST(req: NextRequest) {
                             messages: [
                                 {
                                     role: 'system',
-                                    content: `${automation.listener?.prompt}: Keep responses under 2 sentences` // Fixed typo: Kepp -> Keep
+                                    content: `${automation.listener?.prompt}: Keep responses under 2 sentences and strictly not more than 1900 characters.` // Fixed typo: Kepp -> Keep
                                 },
                                 ...customer_history.history,
                                 {

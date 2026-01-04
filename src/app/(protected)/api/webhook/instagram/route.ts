@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
     console.log("[WEBHOOK] Received payload type:", webhook_payload.entry?.[0]?.messaging ? 'messaging' : webhook_payload.entry?.[0]?.changes ? 'changes' : 'unknown');
     
     let matcher
+    
     try {
         if (webhook_payload.entry[0].messaging) {
             console.log("[WEBHOOK] Processing messaging event");

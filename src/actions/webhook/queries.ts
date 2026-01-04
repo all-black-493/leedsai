@@ -3,14 +3,18 @@
 import { prisma } from "@/lib/prisma"
 
 export const matchKeyword = async (keyword: string) => {
-    return await prisma.keyword.findFirst({
-        where: {
-            word: {
-                equals: keyword,
-                mode: 'insensitive'
+    try {
+        return await prisma.keyword.findFirst({
+            where: {
+                word: {
+                    equals: keyword,
+                    mode: 'insensitive'
+                }
             }
-        }
-    })
+        })
+    } catch (error) {
+        console.log("[MATCHKEYWORD ERROR]:", error)
+    }
 }
 
 export const getKeywordAutomation = async (
@@ -88,35 +92,35 @@ export const trackResponse = async (
 
 
 export const getChatHistory = async (sender: string, receiver: string) => {
-  const history = await prisma.dms.findMany({
-    where: {
-      OR: [
-        {
-          senderId: sender,
-          receiver: receiver,
+    const history = await prisma.dms.findMany({
+        where: {
+            OR: [
+                {
+                    senderId: sender,
+                    receiver: receiver,
+                },
+                {
+                    senderId: receiver,
+                    receiver: sender,
+                },
+            ],
         },
-        {
-          senderId: receiver,
-          receiver: sender,
+        orderBy: {
+            createdAt: 'asc',
         },
-      ],
-    },
-    orderBy: {
-      createdAt: 'asc',
-    },
-  })
+    })
 
-  const chatSession = history.map((chat) => {
+    const chatSession = history.map((chat) => {
+        return {
+            role: (chat.senderId === receiver ? 'user' : 'assistant') as 'user' | 'assistant',
+            content: chat.message || '',
+        }
+    })
+
     return {
-      role: (chat.senderId === receiver ? 'user' : 'assistant') as 'user' | 'assistant',
-      content: chat.message || '',
+        history: chatSession,
+        automationId: history[history.length - 1]?.automationId,
     }
-  })
-
-  return {
-    history: chatSession,
-    automationId: history[history.length - 1]?.automationId,
-  }
 }
 
 export const getKeywordPost = async (

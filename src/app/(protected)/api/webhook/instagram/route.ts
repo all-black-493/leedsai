@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     console.log("[WEBHOOK] Received payload type:", webhook_payload.entry?.[0]?.messaging ? 'messaging' : webhook_payload.entry?.[0]?.changes ? 'changes' : 'unknown');
     
     let matcher
-    
+
     try {
         if (webhook_payload.entry[0].messaging) {
             console.log("[WEBHOOK] Processing messaging event");
@@ -117,9 +117,10 @@ export async function POST(req: NextRequest) {
                                 }
                             ]
                         })
+                        console.log("[SMART AI MESSAGE]:", smart_ai_message)
                         console.log("[WEBHOOK] OpenAI API call completed, choices:", smart_ai_message.choices.length);
 
-                        if (smart_ai_message.choices[0].message.content) {
+                        if (smart_ai_message.choices[0].message.content!) {
                             console.log("[WEBHOOK] OpenAI response received");
                             
                             const receiver = createChatHistory(

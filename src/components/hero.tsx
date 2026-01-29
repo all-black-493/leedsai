@@ -20,7 +20,7 @@ export function Hero() {
           </h1>
 
           <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-2xl mb-12 leading-relaxed text-balance font-light">
-            Use AI to automate outreach, qualify leads, and drive sales 24/7 on Instagram, WhatsApp, and TikTok.
+            Use AI to automate outreach, qualify leads, and drive sales 24/7 on Instagram.
           </p>
 
           {/* <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-20">

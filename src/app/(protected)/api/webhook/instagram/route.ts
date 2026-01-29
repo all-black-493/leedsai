@@ -6,6 +6,24 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { createChatHistory } from "@/actions/webhook/create-history-query";
 
+// --- [HELPER] Hard limit enforcer ---
+function truncateString(str: string | null | undefined, maxLength: number = 690): string {
+    if (!str) return "";
+    if (str.length <= maxLength) return str;
+    
+    // Cut at maxLength
+    const truncated = str.slice(0, maxLength);
+    
+    // Try to cut at the last period to keep it grammatical
+    const lastPeriod = truncated.lastIndexOf('.');
+    if (lastPeriod > 0) {
+        return truncated.slice(0, lastPeriod + 1);
+    }
+    
+    // If no period found, just return the hard cut
+    return truncated;
+}
+
 export async function GET(req: NextRequest) {
     console.log("[WEBHOOK] GET endpoint called");
     const hub = req.nextUrl.searchParams.get('hub.challenge')
@@ -114,7 +132,8 @@ export async function POST(req: NextRequest) {
                             messages: [
                                 {
                                     role: 'system',
-                                    content: `${automation.listener?.prompt}: Keep responses under 2 sentences and strictly not more than 700 characters. VERIFY THAT THIS NUMBER OF CHARACTERS IS NOT EXCEEDED IN YOUR RESPONSE.`
+                                    // Soft limit of 400 to be safe
+                                    content: `${automation.listener?.prompt}: You are chatting on Instagram. Be extremely concise. distinct limit of 400 characters max. Never write long paragraphs!`
                                 },
                                 {
                                     role: "user",
@@ -127,6 +146,9 @@ export async function POST(req: NextRequest) {
 
                         if (smart_ai_message.choices[0].message.content!) {
                             console.log("[WEBHOOK] OpenAI response received");
+                            
+                            // FORCE TRUNCATION HERE
+                            const finalContent = truncateString(smart_ai_message.choices[0].message.content);
 
                             const receiver = createChatHistory(
                                 automation.id,
@@ -139,7 +161,7 @@ export async function POST(req: NextRequest) {
                                 automation.id,
                                 webhook_payload.entry[0].id,
                                 webhook_payload.entry[0].messaging[0].sender.id,
-                                webhook_payload.entry[0].messaging[0].message.content
+                                finalContent // Save truncated version
                             )
 
                             await prisma.$transaction([receiver, sender])
@@ -148,7 +170,7 @@ export async function POST(req: NextRequest) {
                             const direct_message = await sendDM(
                                 webhook_payload.entry[0].id,
                                 webhook_payload.entry[0].messaging[0].sender.id,
-                                smart_ai_message.choices[0].message.content,
+                                finalContent, // Send truncated version
                                 automation.User?.integrations[0].token!
                             )
                             console.log("[WEBHOOK] AI DM send status:", direct_message?.status);
@@ -250,7 +272,8 @@ export async function POST(req: NextRequest) {
                                 messages: [
                                     {
                                         role: 'system',
-                                        content: `${automation.listener?.prompt}: Keep responses under 2 sentences and strictly not more than 700 characters. VERIFY THAT THIS NUMBER OF CHARACTERS IS NOT EXCEEDED IN YOUR RESPONSE.`
+                                        // Soft limit of 400 to be safe
+                                        content: `${automation.listener?.prompt}: You are chatting on Instagram. Be extremely concise. distinct limit of 400 characters max. Never write long paragraphs.`
                                     },
                                     {
                                         role: "user",
@@ -262,6 +285,9 @@ export async function POST(req: NextRequest) {
 
                             if (smart_ai_message.choices[0].message.content) {
                                 console.log("[WEBHOOK] OpenAI response for comment received");
+                                
+                                // FORCE TRUNCATION HERE
+                                const finalContent = truncateString(smart_ai_message.choices[0].message.content);
 
                                 const receiver = createChatHistory(
                                     automation.id,
@@ -274,7 +300,7 @@ export async function POST(req: NextRequest) {
                                     automation.id,
                                     webhook_payload.entry[0].id,
                                     webhook_payload.entry[0].changes[0].value.from.id,
-                                    webhook_payload.entry[0].changes[0].message.content
+                                    finalContent // Save truncated version
                                 )
 
                                 await prisma.$transaction([receiver, sender])
@@ -283,7 +309,7 @@ export async function POST(req: NextRequest) {
                                 const direct_message = await sendPrivateMessage(
                                     webhook_payload.entry[0].id,
                                     webhook_payload.entry[0].changes[0].value.id,
-                                    automation.listener?.prompt,
+                                    finalContent, // Fixed: Send the truncated AI response, not the raw prompt
                                     automation.User?.integrations[0].token!
                                 )
                                 console.log("[WEBHOOK] Comment AI private message send status:", direct_message?.status);
@@ -346,7 +372,8 @@ export async function POST(req: NextRequest) {
                             messages: [
                                 {
                                     role: 'system',
-                                    content: `${automation.listener?.prompt}: Keep responses under 2 sentences and strictly not more than 700 characters. VERIFY THAT THIS NUMBER OF CHARACTERS IS NOT EXCEEDED IN YOUR RESPONSE.` // Fixed typo: Kepp -> Keep
+                                    // Soft limit of 400
+                                    content: `${automation.listener?.prompt}: You are chatting on Instagram. Be extremely concise. distinct limit of 400 characters max. Never write long paragraphs.` 
                                 },
                                 ...customer_history.history,
                                 {
@@ -360,6 +387,9 @@ export async function POST(req: NextRequest) {
                         if (smart_ai_message.choices[0].message.content) {
                             console.log("[WEBHOOK] OpenAI response with history received");
 
+                            // FORCE TRUNCATION HERE
+                            const finalContent = truncateString(smart_ai_message.choices[0].message.content);
+
                             const receiver = createChatHistory(
                                 automation.id,
                                 webhook_payload.entry[0].id,
@@ -371,7 +401,7 @@ export async function POST(req: NextRequest) {
                                 automation.id,
                                 webhook_payload.entry[0].id,
                                 messagingEvent.sender.id,
-                                smart_ai_message.choices[0].message.content,
+                                finalContent // Save truncated version
                             )
 
                             await prisma.$transaction([receiver, sender])
@@ -380,7 +410,7 @@ export async function POST(req: NextRequest) {
                             const direct_message = await sendDM(
                                 webhook_payload.entry[0].id,
                                 messagingEvent.sender.id,
-                                smart_ai_message.choices[0].message.content,
+                                finalContent, // Send truncated version
                                 automation.User?.integrations[0].token!
                             )
                             console.log("[WEBHOOK] Continued conversation DM send status:", direct_message?.status);

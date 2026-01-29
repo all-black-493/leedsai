@@ -1,7 +1,6 @@
 import DoubleGradientCard from '@/components/global/double-gradient-card'
 import { DASHBOARD_CARDS } from '@/constants/dashboard'
 import { BarChart3 } from 'lucide-react'
-import React from 'react'
 import Chart from './_components/chart'
 import MetricsCard from './_components/chart/metrics-card'
 

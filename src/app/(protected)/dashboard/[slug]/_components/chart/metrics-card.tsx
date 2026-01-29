@@ -1,3 +1,5 @@
+"use client"
+
 import { useQueryAutomations } from '@/hooks/use-queries'
 import React from 'react'
 

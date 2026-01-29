@@ -48,7 +48,7 @@ const MetricsCard = () => {
                                 100%
                             </h3>
                             <p className="text-sm text-white">
-                                {comments} out of {comments} comments replied
+                                {comments! > 0 ? comments : 0} out of {comments! > 0 ? comments : 0} comments replied
                             </p>
                         </div>
                     ) : (
@@ -56,8 +56,8 @@ const MetricsCard = () => {
                             <h3 className="text-3xl font-bold">
                                 100%
                             </h3>
-                            <p className="text-sm text-secondary">
-                                {dms} out of {dms} DMs replied
+                            <p className="text-sm text-white">
+                                {dms! > 0 ? dms : 0} out of {dms! > 0 ? dms : 0} DMs replied
                             </p>
                         </div>
                     )}

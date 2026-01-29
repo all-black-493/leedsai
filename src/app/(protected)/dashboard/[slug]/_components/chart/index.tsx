@@ -9,7 +9,7 @@ const chartData = [
     { month: 'February', desktop: 50 },
     { month: 'March', desktop: 37 },
     { month: 'April', desktop: 86 },
-    { month: 'May', desktop: 92 },
+    { month: 'May', desktop: 66 },
     { month: 'June', desktop: 14 }
 ]
 

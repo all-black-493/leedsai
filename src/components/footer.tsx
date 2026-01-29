@@ -8,9 +8,9 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
-                S
+                AI
               </div>
-              <span className="font-semibold tracking-tight">Slide</span>
+              <span className="font-semibold tracking-tight">Leeds</span>
             </Link>
             <p className="text-sm text-muted-foreground">Automating social engagement for the modern web.</p>
           </div>

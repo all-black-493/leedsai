@@ -27,7 +27,7 @@ export function SiteHeader() {
             </Link>
           </nav>
         </div>
-        <div className="flex items-center gap-4">
+        {/* <div className="flex items-center gap-4">
           <Link
             href="/login"
             className="text-sm font-medium text-muted-foreground hover:text-foreground hidden sm:block"
@@ -37,7 +37,7 @@ export function SiteHeader() {
           <Button size="sm" className="rounded-full px-5">
             Get Started
           </Button>
-        </div>
+        </div> */}
       </div>
     </header>
   )

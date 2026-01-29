@@ -23,7 +23,7 @@ export function Hero() {
             Use AI to automate outreach, qualify leads, and drive sales 24/7 on Instagram, WhatsApp, and TikTok.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-20">
+          {/* <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-20">
             <Button size="lg" className="rounded-full h-14 px-8 text-base w-full sm:w-auto font-medium">
               Start generating leads
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -36,7 +36,7 @@ export function Hero() {
               <PlayCircle className="mr-2 h-4 w-4" />
               Watch the film
             </Button>
-          </div>
+          </div> */}
 
           <div className="relative w-full max-w-6xl rounded-xl border border-white/10 bg-white/5 p-2 backdrop-blur-sm shadow-2xl">
             <div className="rounded-lg overflow-hidden bg-[#0A0A0A] aspect-[16/9] md:aspect-[2.4/1] relative border border-white/5">

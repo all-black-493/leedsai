@@ -27,17 +27,17 @@ export function SiteHeader() {
             </Link>
           </nav>
         </div>
-        {/* <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4">
           <Link
-            href="/login"
+            href="/dashboard"
             className="text-sm font-medium text-muted-foreground hover:text-foreground hidden sm:block"
           >
             Log in
           </Link>
-          <Button size="sm" className="rounded-full px-5">
+          {/* <Button size="sm" className="rounded-full px-5">
             Get Started
-          </Button>
-        </div> */}
+          </Button> */}
+        </div>
       </div>
     </header>
   )

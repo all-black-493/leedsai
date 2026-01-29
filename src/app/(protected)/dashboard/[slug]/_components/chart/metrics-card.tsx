@@ -28,7 +28,7 @@ const MetricsCard = () => {
                             <h2 className="text-3xl font-bold">
                                 Comments
                             </h2>
-                            <p className="text-sm text-secondary">
+                            <p className="text-sm text-white">
                                 On your posts
                             </p>
                         </div>
@@ -37,7 +37,7 @@ const MetricsCard = () => {
                             <h2 className="text-3xl font-bold">
                                 Direct Messages
                             </h2>
-                            <p className="text-sm text-secondary">
+                            <p className="text-sm text-white">
                                 On your account
                             </p>
                         </div>
@@ -47,7 +47,7 @@ const MetricsCard = () => {
                             <h3 className="text-3xl font-bold">
                                 100%
                             </h3>
-                            <p className="text-sm text-secondary">
+                            <p className="text-sm text-white">
                                 {comments} out of {comments} comments replied
                             </p>
                         </div>

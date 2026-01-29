@@ -48,9 +48,9 @@ const Chart = () => {
                             <Area
                                 dataKey="desktop"
                                 type="natural"
-                                fill="var(--color-desktop)"
+                                fill="#22c55e80"
                                 fillOpacity={0.4}
-                                stroke="var(--color-desktop)"
+                                stroke="#22c55e"
                             />
                         </AreaChart>
                     </ChartContainer>
